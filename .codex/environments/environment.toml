@@ -1,0 +1,25 @@
+version = 1
+name = "AgentMergeGuard WSL"
+
+[setup]
+script = "bash .codex/setup.sh"
+
+[[actions]]
+name = "Env check"
+icon = "run"
+command = "source ~/.codex-shell-env; pwd; node -v; npm -v; pnpm -v; git status --short"
+
+[[actions]]
+name = "Install"
+icon = "run"
+command = "source ~/.codex-shell-env; pnpm install"
+
+[[actions]]
+name = "Test"
+icon = "run"
+command = "source ~/.codex-shell-env; pnpm test"
+
+[[actions]]
+name = "Build"
+icon = "run"
+command = "source ~/.codex-shell-env; pnpm run build"
