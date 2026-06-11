@@ -176,3 +176,22 @@ Examples:
 
 Do not use sudo or apt from Codex.
 System setup is handled manually by the owner in an external WSL terminal.
+
+## WSL Node/pnpm environment rule
+
+Codex may run non-interactive WSL commands that do not automatically load nvm.
+
+Before running Node, npm, pnpm, Vitest, tsup, or workspace scripts, use:
+
+`source ~/.codex-shell-env`
+
+Examples:
+
+`source ~/.codex-shell-env; node -v; pnpm -v`
+
+`source ~/.codex-shell-env; pnpm install`
+
+`source ~/.codex-shell-env; pnpm test`
+
+Do not use sudo or apt from Codex.
+System setup is handled manually by the owner in an external WSL terminal.
