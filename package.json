@@ -1,0 +1,30 @@
+{
+  "name": "agent-mergeguard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pre-merge risk guard for AI-generated PRs, MCP configs, and agent instruction files.",
+  "type": "module",
+  "packageManager": "pnpm@11.5.3",
+  "scripts": {
+    "build": "pnpm -r --if-present --workspace-concurrency=1 build",
+    "test": "vitest run",
+    "lint": "node -e \"console.log('lint placeholder: no lint rules configured yet')\"",
+    "scan": "pnpm --filter @agent-mergeguard/cli exec tsx src/index.ts scan ."
+  },
+  "keywords": [
+    "ai-generated-code",
+    "mcp",
+    "security",
+    "pre-merge",
+    "codex",
+    "github-actions"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.0.0"
+  }
+}

@@ -2,26 +2,58 @@
 
 Before you merge AI-written code, run one guard.
 
-AgentMergeGuard is a lightweight pre-merge risk guard for AI-generated pull requests, MCP configs, agent instruction files, GitHub Actions workflows, and package scripts.
+AgentMergeGuard is an early-stage pre-merge risk guard for AI-generated pull requests, MCP configs, agent instruction files, GitHub Actions workflows, package scripts, and secret-like leaks.
 
-## What it checks
+## Current status
 
-- Risky MCP configs
-- Unsafe AGENTS.md / CLAUDE.md / Cursor rules instructions
-- Dangerous package.json lifecycle scripts
-- Over-permissive GitHub Actions workflows
-- Secret-like strings
-- Security-sensitive PR diffs
+This repository is currently a minimal TypeScript/pnpm skeleton.
+
+Implemented now:
+
+- pnpm workspace
+- `@agent-mergeguard/core` placeholder scan function
+- `@agent-mergeguard/rules` placeholder core rules
+- `@agent-mergeguard/cli` placeholder `scan` command
+- Vitest test setup
+- safe/risky fixture directories
+
+Not implemented yet:
+
+- real rule engine
+- GitHub Action
+- browser scanner
+- SARIF output
+- paid rule pack
+
+## Quickstart
+
+Install dependencies:
+
+`pnpm install`
+
+Run tests:
+
+`pnpm test`
+
+Build packages:
+
+`pnpm run build`
+
+Run placeholder scan:
+
+`pnpm scan`
 
 ## Product direction
 
 Free:
+
 - CLI scanner
 - GitHub Action
-- Static browser scanner
-- Core rule set
+- static browser scanner
+- core rule set
 
 Paid:
+
 - Pro Rule Pack
 - Maintainer Kit
 - Team Pack
@@ -29,4 +61,5 @@ Paid:
 ## Revenue proof
 
 This project only proves itself through completed revenue.
+
 Stars, visits, downloads, and waitlist signups are secondary.
