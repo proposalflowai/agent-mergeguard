@@ -11,7 +11,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --clean",
-    "start": "tsx src/index.ts"
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
   },
   "dependencies": {
     "@agent-mergeguard/core": "workspace:*",

@@ -9,7 +9,7 @@
     "build": "pnpm -r --if-present --workspace-concurrency=1 build",
     "test": "vitest run",
     "lint": "node -e \"console.log('lint placeholder: no lint rules configured yet')\"",
-    "scan": "pnpm --filter @agent-mergeguard/cli exec tsx src/index.ts scan ."
+    "scan": "pnpm run build && node packages/cli/dist/index.js scan ."
   },
   "keywords": [
     "ai-generated-code",
