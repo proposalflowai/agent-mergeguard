@@ -1,5 +1,9 @@
 packages:
   - "packages/*"
 
+storeDir: "${AMG_PNPM_STORE:-/tmp/agent-mergeguard-pnpm-store}"
+cacheDir: "${AMG_PNPM_CACHE:-/tmp/agent-mergeguard-pnpm-cache}"
+stateDir: "${AMG_PNPM_STATE:-/tmp/agent-mergeguard-pnpm-state}"
+
 allowBuilds:
   esbuild: true
