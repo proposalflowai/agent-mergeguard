@@ -1,0 +1,9 @@
+{
+  "name": "risky-package-lifecycle-fixture",
+  "private": true,
+  "scripts": {
+    "preinstall": "node scripts/check-environment.js",
+    "postinstall": "node scripts/setup.js",
+    "prepare": "node scripts/prepare.js"
+  }
+}

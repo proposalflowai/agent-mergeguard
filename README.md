@@ -6,20 +6,19 @@ AgentMergeGuard is an early-stage pre-merge risk guard for AI-generated pull req
 
 ## Current status
 
-This repository is currently a minimal TypeScript/pnpm skeleton.
+This repository is currently an early TypeScript/pnpm MVP.
 
 Implemented now:
 
 - pnpm workspace
-- `@agent-mergeguard/core` placeholder scan function
-- `@agent-mergeguard/rules` placeholder core rules
+- `@agent-mergeguard/core` local file discovery and rule runner
+- `@agent-mergeguard/rules` MVP checks for package lifecycle scripts, GitHub Actions `write-all` permissions, and agent instructions that discourage tests
 - `@agent-mergeguard/cli` placeholder `scan` command
 - Vitest test setup
-- safe/risky fixture directories
+- safe/risky fixtures for the MVP rules
 
 Not implemented yet:
 
-- real rule engine
 - GitHub Action
 - browser scanner
 - SARIF output
@@ -39,7 +38,7 @@ Build packages:
 
 `pnpm run build`
 
-Run placeholder scan:
+Run local scan:
 
 `pnpm scan`
 

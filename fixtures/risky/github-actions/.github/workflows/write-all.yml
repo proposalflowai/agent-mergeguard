@@ -1,0 +1,12 @@
+name: risky-write-all
+
+on:
+  pull_request:
+
+permissions: write-all
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "risky fixture"

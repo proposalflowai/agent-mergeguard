@@ -1,0 +1,8 @@
+{
+  "name": "safe-package-lifecycle-fixture",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsc --noEmit"
+  }
+}

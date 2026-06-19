@@ -1,0 +1,12 @@
+name: safe-read-only
+
+on:
+  pull_request:
+
+permissions: read-all
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "safe fixture"
