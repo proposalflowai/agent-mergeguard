@@ -13,7 +13,7 @@ Implemented now:
 - pnpm workspace
 - `@agent-mergeguard/core` local file discovery and rule runner
 - `@agent-mergeguard/rules` MVP checks for package lifecycle scripts, GitHub Actions `write-all` permissions, and agent instructions that discourage tests
-- `@agent-mergeguard/cli` placeholder `scan` command
+- `@agent-mergeguard/cli` `scan` command with text, JSON, and Markdown reports
 - Vitest test setup
 - safe/risky fixtures for the MVP rules
 
@@ -41,6 +41,32 @@ Build packages:
 Run local scan:
 
 `pnpm scan`
+
+Run the CLI directly:
+
+`agent-mergeguard scan .`
+
+Report formats:
+
+`agent-mergeguard scan . --format text`
+
+`agent-mergeguard scan . --format json`
+
+`agent-mergeguard scan . --format markdown`
+
+Only show higher-severity findings:
+
+`agent-mergeguard scan . --min-severity high`
+
+Exclude paths from scanning:
+
+`agent-mergeguard scan . --exclude fixtures --exclude dist`
+
+When scanning this repository root, fixtures are excluded by default so fixture-only risky examples do not fail the normal local scan. Include them intentionally with:
+
+`agent-mergeguard scan . --include-fixtures`
+
+The CLI exits with code 1 when high or critical findings are present after path excludes are applied. It exits with code 0 when no high or critical findings are present.
 
 ## Product direction
 
