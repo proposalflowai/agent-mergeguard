@@ -35,6 +35,7 @@ export interface Finding {
 export interface ScanInput {
   targetPath: string;
   rules?: Rule[];
+  exclude?: string[];
 }
 
 export interface ScanResult {
@@ -49,7 +50,7 @@ const ignoredDirectories = new Set([".git", "node_modules", "dist", ".turbo", "c
 
 export function scan(input: ScanInput): ScanResult {
   const ruleCount = input.rules?.length ?? 0;
-  const files = discoverFiles(input.targetPath);
+  const files = discoverFiles(input.targetPath, { exclude: input.exclude });
   const context: RuleContext = {
     targetPath: input.targetPath,
     files
@@ -65,7 +66,7 @@ export function scan(input: ScanInput): ScanResult {
   };
 }
 
-export function discoverFiles(targetPath: string): ScannedFile[] {
+export function discoverFiles(targetPath: string, options: { exclude?: string[] } = {}): ScannedFile[] {
   const root = path.resolve(targetPath);
 
   if (!existsSync(root)) {
@@ -73,7 +74,10 @@ export function discoverFiles(targetPath: string): ScannedFile[] {
   }
 
   const targetStat = statSync(root);
-  const absolutePaths = targetStat.isDirectory() ? walkDirectory(root) : [root];
+  const excludeMatchers = (options.exclude ?? []).map(createExcludeMatcher);
+  const absolutePaths = targetStat.isDirectory()
+    ? walkDirectory(root, root, excludeMatchers)
+    : [root].filter((absolutePath) => !isExcluded(root, absolutePath, excludeMatchers));
 
   return absolutePaths.map((absolutePath) => ({
     path: normalizePath(path.relative(root, absolutePath) || path.basename(absolutePath)),
@@ -91,17 +95,21 @@ export function lineNumberForPattern(content: string, pattern: RegExp): number {
   return match ? lineNumberForIndex(content, match.index) : 1;
 }
 
-function walkDirectory(root: string): string[] {
-  const entries = readdirSyncSorted(root);
+function walkDirectory(directory: string, root: string, excludeMatchers: ExcludeMatcher[]): string[] {
+  const entries = readdirSyncSorted(directory);
   const files: string[] = [];
 
   for (const entry of entries) {
-    const absolutePath = path.join(root, entry);
+    const absolutePath = path.join(directory, entry);
     const stats = statSync(absolutePath);
+
+    if (isExcluded(root, absolutePath, excludeMatchers)) {
+      continue;
+    }
 
     if (stats.isDirectory()) {
       if (!ignoredDirectories.has(entry)) {
-        files.push(...walkDirectory(absolutePath));
+        files.push(...walkDirectory(absolutePath, root, excludeMatchers));
       }
       continue;
     }
@@ -120,4 +128,51 @@ function readdirSyncSorted(directory: string): string[] {
 
 function normalizePath(filePath: string): string {
   return filePath.split(path.sep).join("/");
+}
+
+type ExcludeMatcher = {
+  normalized: string;
+  pattern?: RegExp;
+};
+
+function createExcludeMatcher(rawExclude: string): ExcludeMatcher {
+  const normalized = normalizePath(rawExclude.trim()).replace(/^\.?\//, "").replace(/\/+$/, "");
+  const hasWildcard = normalized.includes("*");
+
+  return {
+    normalized,
+    pattern: hasWildcard ? new RegExp(`^${escapeGlob(normalized)}(?:/.*)?$`) : undefined
+  };
+}
+
+function isExcluded(root: string, absolutePath: string, excludeMatchers: ExcludeMatcher[]): boolean {
+  if (excludeMatchers.length === 0) {
+    return false;
+  }
+
+  const relativePath = normalizePath(path.relative(root, absolutePath) || path.basename(absolutePath));
+  const segments = relativePath.split("/");
+
+  return excludeMatchers.some((matcher) => {
+    if (!matcher.normalized) {
+      return false;
+    }
+
+    if (matcher.pattern) {
+      return matcher.pattern.test(relativePath);
+    }
+
+    return (
+      relativePath === matcher.normalized ||
+      relativePath.startsWith(`${matcher.normalized}/`) ||
+      segments.includes(matcher.normalized)
+    );
+  });
+}
+
+function escapeGlob(glob: string): string {
+  return glob
+    .split("*")
+    .map((part) => part.replace(/[|\\{}()[\]^$+?.]/g, "\\$&"))
+    .join("[^/]*");
 }

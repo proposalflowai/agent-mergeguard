@@ -42,4 +42,15 @@ describe("scan", () => {
     expect(files.map((file) => file.path)).toEqual([".github/workflows/write-all.yml"]);
     expect(files[0]?.content).toContain("permissions: write-all");
   });
+
+  it("excludes matching paths before rules run", () => {
+    const files = discoverFiles("fixtures/risky", { exclude: ["package-lifecycle", "github-actions"] });
+
+    expect(files.map((file) => file.path)).toEqual([
+      "agent-instructions/.cursor/rules/risky.mdc",
+      "agent-instructions/AGENTS.md",
+      "agent-instructions/CLAUDE.md",
+      "README.md"
+    ]);
+  });
 });
